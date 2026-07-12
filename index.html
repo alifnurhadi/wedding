@@ -13,7 +13,7 @@ header h1{font-size:clamp(1rem,4vw,1.7rem);font-style:italic;color:var(--gold);l
 header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6a5030;margin-top:.2rem}
 
 .map-wrap{
-  position:relative;width:100%;max-width:840px;
+  position:relative;width:100%;max-width:560px;
   border:3px solid #221404;
   box-shadow:0 0 0 1px #5a3810,0 12px 40px rgba(0,0,0,.7);
 }
@@ -123,21 +123,6 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 .ibody{font-size:.62rem;line-height:1.9;color:#c0a880;white-space:pre-line}
 .idiv{width:30px;height:1px;background:var(--gold);margin:.65rem auto}
 
-/* Mobile portrait: rotate map to landscape (touch devices only — desktop never rotates) */
-@media (pointer:coarse) and (max-width:767px) and (orientation:portrait){
-  body{overflow:hidden}
-  header,.hint{visibility:hidden;pointer-events:none}
-  .map-wrap{
-    position:fixed !important;
-    width:150vw !important;
-    max-width:none !important;
-    left:-25vw;
-    top:calc(50vh - 50vw);
-    transform:rotate(90deg);
-    transform-origin:75vw 50vw;
-    z-index:10;
-  }
-}
 </style>
 
 <header>
@@ -146,7 +131,7 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 </header>
 
 <div class="map-wrap" id="mapWrap">
-  <canvas id="mapCanvas" width="840" height="560"></canvas>
+  <canvas id="mapCanvas" width="560" height="840"></canvas>
 </div>
 <p class="hint">✦ Tap a glowing sign to take your photo · Tap ✦ for wedding notes ✦</p>
 
@@ -181,64 +166,84 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 </div>
 
 <script>
-const COLS=21,ROWS=14,CW=840,CH=560;
+const COLS=14,ROWS=21,CW=560,CH=840;
 const TW=CW/COLS,TH=CH/ROWS;
 function px(c){return c*TW} function py(r){return r*TH}
 
 const MAP=[
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,3,3,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,3,3,3,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,3,3,3,3,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,3,3,3,3,3,1,1,1,1,2,1,1,1,1,1,1,1,1,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,1,1,1,1,1,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,1,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,3,3,1,1,1,2,1,1,1,1,1,1,0],
+  [0,3,3,3,1,1,2,1,1,1,1,1,1,0],
+  [0,3,3,3,3,1,2,1,1,1,1,1,1,0],
+  [0,3,3,3,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,2,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,1,1,1,1,1,1,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 ];
 
 const OBJS=[
-  ...[1,2,3,4].flatMap(x=>[1,2,3].map(y=>({t:'tree',x,y}))),
+  // Trees — top-left flanking wall
+  ...[1,2].flatMap(x=>[1,2,3].map(y=>({t:'tree',x,y}))),
   {t:'tree',x:5,y:1},{t:'tree',x:5,y:2},
-  ...[13,14,15,16].flatMap(x=>[1,2].map(y=>({t:'tree',x,y}))),
-  {t:'tree',x:12,y:1},{t:'tree',x:17,y:1},
-  ...[1,2].flatMap(x=>[6,7,8].map(y=>({t:'tree',x,y}))),
-  ...[15,16,17,18].flatMap(x=>[5,6,7,8].map(y=>({t:'tree',x,y}))),
-  {t:'tree',x:14,y:6},{t:'tree',x:19,y:5},
-  {t:'tree',x:14,y:9},{t:'tree',x:15,y:9},{t:'tree',x:14,y:10},
-  {t:'building',x:9,y:1},
-  {t:'wall',x:6,y:1},
-  {t:'arch',x:10,y:3},
-  {t:'flower',x:4,y:4,c:'#F48FB1'},{t:'flower',x:5,y:3,c:'#FFD54F'},
-  {t:'flower',x:4,y:5,c:'#FF80AB'},{t:'flower',x:6,y:4,c:'#F48FB1'},
-  {t:'flower',x:5,y:7,c:'#FFD54F'},{t:'flower',x:6,y:8,c:'#FF80AB'},
-  {t:'flower',x:12,y:3,c:'#FFD54F'},{t:'flower',x:13,y:4,c:'#F48FB1'},
-  {t:'flower',x:12,y:7,c:'#FF80AB'},{t:'flower',x:13,y:8,c:'#FFD54F'},
-  {t:'flower',x:11,y:10,c:'#F48FB1'},{t:'flower',x:12,y:11,c:'#FF80AB'},
-  {t:'rock',x:7,y:10},{t:'rock',x:13,y:11},{t:'rock',x:8,y:8},
-  {t:'lily',x:1,y:9},{t:'lily',x:2,y:11},{t:'lily',x:3,y:12},
-  {t:'lantern',x:17,y:9},{t:'lantern',x:19,y:10},
-  {t:'table',x:16,y:11},{t:'table',x:18,y:12},
-  {t:'flower',x:19,y:11,c:'#F48FB1'},{t:'flower',x:17,y:12,c:'#FFD54F'},
-  {t:'groom',x:6,y:3},
-  {t:'bride',x:7,y:3},
+  // Trees — top-right flanking building
+  ...[11,12].flatMap(x=>[1,2,3].map(y=>({t:'tree',x,y}))),
+  {t:'tree',x:7,y:1},{t:'tree',x:7,y:2},
+  {t:'tree',x:10,y:3},{t:'tree',x:10,y:4},
+  // Trees — mid left + right (garden border)
+  ...[1,2].flatMap(x=>[5,6,7,8].map(y=>({t:'tree',x,y}))),
+  ...[11,12].flatMap(x=>[5,6,7,8].map(y=>({t:'tree',x,y}))),
+  // Trees — forest right side
+  ...[10,11,12].flatMap(x=>[10,11,12,13].map(y=>({t:'tree',x,y}))),
+  {t:'tree',x:11,y:15},{t:'tree',x:12,y:15},{t:'tree',x:12,y:16},
+  // Venue structures
+  {t:'building',x:8,y:1},
+  {t:'wall',x:3,y:1},
+  // Couple in front of wall
+  {t:'groom',x:3,y:3},
+  {t:'bride',x:4,y:3},
+  // Arch on path
+  {t:'arch',x:6,y:3},
+  // Flowers — garden
+  {t:'flower',x:3,y:4,c:'#FFD54F'},{t:'flower',x:9,y:4,c:'#FF80AB'},
+  {t:'flower',x:3,y:5,c:'#F48FB1'},{t:'flower',x:4,y:5,c:'#FFD54F'},
+  {t:'flower',x:8,y:5,c:'#FF80AB'},{t:'flower',x:5,y:6,c:'#FF80AB'},
+  {t:'flower',x:9,y:6,c:'#F48FB1'},{t:'flower',x:3,y:7,c:'#FFD54F'},
+  {t:'flower',x:8,y:7,c:'#FFD54F'},{t:'flower',x:4,y:8,c:'#F48FB1'},
+  {t:'flower',x:9,y:8,c:'#FF80AB'},{t:'flower',x:5,y:9,c:'#FF80AB'},
+  {t:'flower',x:7,y:9,c:'#F48FB1'},
+  // Rocks + lily pads
+  {t:'rock',x:8,y:13},{t:'rock',x:5,y:9},
+  {t:'lily',x:1,y:10},{t:'lily',x:2,y:12},{t:'lily',x:3,y:13},
+  // Reception
+  {t:'lantern',x:8,y:15},{t:'lantern',x:10,y:15},
+  {t:'table',x:7,y:17},{t:'table',x:9,y:17},{t:'table',x:8,y:18},
+  {t:'flower',x:7,y:18,c:'#F48FB1'},{t:'flower',x:10,y:16,c:'#FFD54F'},
+  {t:'flower',x:9,y:18,c:'#FF80AB'},
 ];
 
 const SPOTS=[
-  {id:'wall',      label:'Photo Wall', tx:7.5, ty:2.2,
+  {id:'wall',     label:'Photo Wall', tx:4,   ty:2.5,
    title:'Floral Photo Wall', sub:'Stand by the backdrop · Rose frame', theme:'wall'},
-  {id:'garden',    label:'Garden',     tx:4.5, ty:6.5,
+  {id:'garden',   label:'Garden',     tx:4,   ty:6.5,
    title:'Garden in Bloom',  sub:'Floral field · Garden frame',          theme:'garden'},
-  {id:'lake',      label:'Lake',       tx:2.5, ty:10.5,
+  {id:'lake',     label:'Lake',       tx:2.5, ty:12,
    title:'Waterside Dream',  sub:'Reflection · Water frame',              theme:'water'},
-  {id:'forest',    label:'Forest',     tx:16.5,ty:7.5,
+  {id:'forest',   label:'Forest',     tx:11,  ty:11.5,
    title:'Forest Glade',     sub:'Woodland walk · Forest frame',          theme:'forest'},
-  {id:'reception', label:'Reception',  tx:19.0,ty:12.0,
+  {id:'reception',label:'Reception',  tx:9,   ty:17.5,
    title:'Reception Hall',   sub:'Celebrate together · Grand frame',      theme:'reception'},
 ];
 
@@ -246,10 +251,10 @@ const INFO=[
   {tx:10.5,ty:1.5,
    title:'Save the Date',
    body:'30 September 2026\n\nGedung Pernikahan Todanan\nBlora, Central Java, Indonesia\n\nAlif N ♥ Lis W'},
-  {tx:8.0,ty:7.5,
+  {tx:7.5,ty:7.5,
    title:'From Our Hearts',
    body:'"We found in each other\nwhat we had been searching for —\na partner, a best friend, and a home.\n\nWe are getting married because\ntogether, we are our best selves."'},
-  {tx:16.0,ty:10.0,
+  {tx:8,ty:15.5,
    title:'Join the Celebration',
    body:'"A great marriage is not when\nthe perfect couple comes together.\nIt is when an imperfect couple learns\nto enjoy their differences."\n\n— Dave Meurer\n\nCome eat, laugh, and dance with us! 🎉'},
 ];
@@ -462,7 +467,7 @@ function bride(tx,ty){
 }
 
 function hearts(){
-  const bx=px(6.5)+TW/2,by=py(3);
+  const bx=px(3.5)+TW/2,by=py(3);
   [[-16,-9,0],[16,-14,1.1],[0,-22,.55]].forEach(([ox,oy,ph])=>{
     const bob=Math.sin(heartT+ph)*4;
     const a=(Math.sin(heartT*.7+ph)+1)*.38;
