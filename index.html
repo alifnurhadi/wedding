@@ -80,7 +80,7 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 }
 .mtitle{font-size:.9rem;font-style:italic;color:var(--gold);text-align:center;letter-spacing:.1em}
 .msub{font-size:.51rem;text-transform:uppercase;letter-spacing:.15em;color:#7a5830;text-align:center}
-.camwrap{position:relative;background:#000;aspect-ratio:4/3;overflow:hidden}
+.camwrap{position:relative;background:#000;aspect-ratio:9/16;overflow:hidden}
 #vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #fc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #fl{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9}
@@ -625,7 +625,7 @@ async function startCam(){
   try{
     if(stream) stream.getTracks().forEach(t=>t.stop());
     stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:facing,width:{ideal:1280},height:{ideal:960}},audio:false
+      video:{facingMode:facing,aspectRatio:{ideal:9/16},width:{ideal:1080},height:{ideal:1920}},audio:false
     });
     vid.srcObject=stream;
     vid.style.transform=facing==='user'?'scaleX(-1)':'';
@@ -643,22 +643,25 @@ vid.addEventListener('loadedmetadata',()=>{
 
 document.getElementById('capBtn').addEventListener('click',async()=>{
   if(!stream||vid.readyState<2){stxt.textContent='Camera not ready yet…';return;}
-  const w=vid.videoWidth||640,h=vid.videoHeight||480;
+  const vw=vid.videoWidth||640,vh=vid.videoHeight||480;
+  // Centre-crop source to 9:16 to match the preview container
+  let sx=0,sy=0,sw=vw,sh=vh;
+  if(vh/vw>16/9){sh=vw*16/9; sy=(vh-sh)/2;}   // video taller than 9:16 → crop height
+  else{sw=vh*9/16; sx=(vw-sw)/2;}               // video wider  than 9:16 → crop width
+  const capW=Math.round(sw),capH=Math.round(sh);
   const out=document.createElement('canvas');
-  out.width=w; out.height=h;
+  out.width=capW; out.height=capH;
   const gx=out.getContext('2d');
-  // Mirror front camera to match what user sees
-  if(facing==='user'){gx.translate(w,0);gx.scale(-1,1);}
+  if(facing==='user'){gx.translate(capW,0);gx.scale(-1,1);}
   try{
-    // createImageBitmap captures a reliable still frame from the video
-    const bmp=await createImageBitmap(vid);
-    gx.drawImage(bmp,0,0,w,h);
+    const bmp=await createImageBitmap(vid,sx,sy,sw,sh);
+    gx.drawImage(bmp,0,0,capW,capH);
     bmp.close();
   }catch{
-    gx.drawImage(vid,0,0,w,h);
+    gx.drawImage(vid,sx,sy,sw,sh,0,0,capW,capH);
   }
   gx.setTransform(1,0,0,1,0,0);
-  drawFrame(theme,w,h,gx,true); // composite onto video, don't clear
+  drawFrame(theme,capW,capH,gx,true);
   fl.classList.remove('pop'); void fl.offsetWidth; fl.classList.add('pop');
   const url=out.toDataURL('image/jpeg',.93);
   const dl=document.getElementById('dlBtn');
