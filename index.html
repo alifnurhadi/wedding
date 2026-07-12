@@ -1,7 +1,6 @@
 <title>Alif N & Lis W — Wedding Invitation</title>
 
 <style>
-  /* ── Tokens ─────────────────────────────────── */
   :root {
     --bg: #FDFCF8;
     --text: #1C1917;
@@ -33,13 +32,12 @@
     color: var(--text);
     font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
     min-height: 100vh;
-    padding: 0 1.5rem;
+    padding: 0 1.25rem;
   }
 
-  /* clip horizontal overflow on a wrapper so body scroll is never blocked */
   #content { overflow-x: clip; }
 
-  /* ── Curtain Entrance ────────────────────────── */
+  /* ── Curtain ──────────────────────────────────── */
   #curtain {
     position: fixed;
     inset: 0;
@@ -59,8 +57,7 @@
 
   #seal {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     z-index: 21;
     pointer-events: none;
@@ -68,11 +65,10 @@
   }
   #seal.hide { opacity: 0; }
 
-  /* ── Content reveal ──────────────────────────── */
-  /* Initial hide applied via JS so content is always visible if JS fails */
+  /* ── Content reveal ───────────────────────────── */
   #content.entering {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(14px);
     transition: opacity 0.8s ease, transform 0.8s ease;
   }
   #content.show { opacity: 1; transform: none; }
@@ -80,47 +76,45 @@
   @media (prefers-reduced-motion: reduce) {
     #curtain, #seal { display: none; }
     #content { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .cd-n.pulse { animation: none !important; }
   }
 
-  /* ── Layout ──────────────────────────────────── */
+  /* ── Layout ───────────────────────────────────── */
   .page {
-    max-width: 580px;
+    max-width: 540px;
     margin: 0 auto;
-    padding: 5rem 0 5.5rem;
+    padding: 2.5rem 0 3.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1.25rem;
   }
 
   .spine { width: 1px; background: var(--accent); }
 
-  /* ── Card frame with corners ─────────────────── */
+  /* ── Card ─────────────────────────────────────── */
   .frame {
     position: relative;
     width: 100%;
     border: 1px solid var(--line);
-    padding: 3rem 2.5rem;
+    padding: 1.75rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1.5rem;
+    cursor: pointer;
+    will-change: transform;
   }
 
-  .corner {
-    position: absolute;
-    width: 44px;
-    height: 44px;
-    overflow: visible;
-  }
+  .corner { position: absolute; width: 40px; height: 40px; overflow: visible; }
   .corner-tl { top: -1px; left: -1px; }
   .corner-tr { top: -1px; right: -1px; transform: scaleX(-1); }
   .corner-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
   .corner-br { bottom: -1px; right: -1px; transform: scale(-1); }
 
-  /* ── Typography ──────────────────────────────── */
+  /* ── Type ─────────────────────────────────────── */
   .eyebrow {
-    font-size: 0.59rem;
+    font-size: 0.57rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--sub);
@@ -131,12 +125,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
+    gap: 0.85rem;
     text-align: center;
   }
 
   h1 {
-    font-size: clamp(3rem, 10vw, 5.5rem);
+    font-size: clamp(2.5rem, 9vw, 4.5rem);
     font-style: italic;
     font-weight: 400;
     line-height: 1;
@@ -146,98 +140,121 @@
   h1 .amp { color: var(--accent); font-size: 0.82em; }
 
   .wdate {
-    font-size: 0.63rem;
-    letter-spacing: 0.2em;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--sub);
-    line-height: 1.7;
+    line-height: 1.65;
   }
 
-  /* ── Ornament divider ────────────────────────── */
+  /* ── Ornament divider ─────────────────────────── */
   .div {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.7rem;
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
   }
   .div-line { flex: 1; height: 1px; background: var(--line); }
 
-  /* ── Countdown ───────────────────────────────── */
+  /* ── Countdown ────────────────────────────────── */
   .cd {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.75rem;
+    gap: 1.25rem;
     text-align: center;
   }
-  .cd-row {
-    display: flex;
-    gap: 2.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .cd-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.45rem;
-  }
+  .cd-row { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+  .cd-unit { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
   .cd-n {
-    font-size: clamp(2.2rem, 6.5vw, 3.5rem);
+    font-size: clamp(1.9rem, 5.5vw, 3rem);
     font-weight: 300;
     font-style: normal;
     font-variant-numeric: tabular-nums;
     line-height: 1;
-    letter-spacing: -0.01em;
+  }
+  .cd-n.pulse { animation: cd-pulse 0.2s ease-out; }
+  @keyframes cd-pulse {
+    0%   { transform: scale(1.22); }
+    100% { transform: scale(1); }
   }
   .cd-u {
-    font-size: 0.48rem;
+    font-size: 0.46rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--sub);
   }
 
-  /* ── Venue ───────────────────────────────────── */
+  /* ── Venue ────────────────────────────────────── */
   .venue {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     text-align: center;
   }
   .venue-nm {
-    font-size: 1.45rem;
+    font-size: 1.3rem;
     font-style: italic;
     font-weight: 400;
     line-height: 1.2;
   }
   .venue-loc {
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     color: var(--sub);
-    line-height: 1.85;
+    line-height: 1.8;
     letter-spacing: 0.03em;
   }
 
-  /* ── Closing ─────────────────────────────────── */
+  /* ── RSVP ─────────────────────────────────────── */
+  .rsvp-btn {
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 0.65rem 2rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+  }
+  .rsvp-btn:hover  { background: var(--accent); color: var(--bg); }
+  .rsvp-btn:active { transform: scale(0.96); }
+  .rsvp-btn.confirmed { background: var(--accent); color: var(--bg); pointer-events: none; }
+
+  /* ── Closing ──────────────────────────────────── */
   .closing {
     text-align: center;
     font-style: italic;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     color: var(--sub);
-    line-height: 1.95;
+    line-height: 1.85;
+  }
+
+  /* ── Particles ────────────────────────────────── */
+  .hp {
+    position: fixed;
+    pointer-events: none;
+    z-index: 99;
+    color: var(--accent);
+    animation: hp-up 0.9s ease-out forwards;
+    user-select: none;
+  }
+  @keyframes hp-up {
+    0%   { opacity: 1; transform: translate(0, 0) scale(1) rotate(var(--r, 0deg)); }
+    100% { opacity: 0; transform: translate(var(--dx, 0px), -90px) scale(0.3) rotate(var(--r, 0deg)); }
   }
 
   @media (max-width: 420px) {
-    .frame { padding: 2.25rem 1rem; }
-    .cd-row { gap: 1.5rem; }
+    .frame { padding: 1.5rem 0.9rem; }
+    .cd-row { gap: 1.25rem; }
   }
 </style>
 
-<!-- Shared SVG defs -->
 <svg style="display:none" aria-hidden="true">
   <defs>
-    <!-- Corner flourish: L-shape from top-left, mirrored for other corners via CSS transform -->
     <symbol id="csym" viewBox="0 0 44 44">
       <polyline points="26,1.5 1.5,1.5 1.5,26"
         style="stroke:var(--pale);fill:none"
@@ -249,68 +266,55 @@
       <circle cx="12"  cy="1.5" r="0.9" style="fill:var(--line)"/>
       <circle cx="1.5" cy="12"  r="0.9" style="fill:var(--line)"/>
     </symbol>
-    <!-- Diamond divider gem -->
     <symbol id="diam" viewBox="0 0 16 16">
       <polygon points="8,1.5 14.5,8 8,14.5 1.5,8" style="fill:var(--accent)"/>
     </symbol>
   </defs>
 </svg>
 
-<!-- ── Curtain panels ───────────────────────────── -->
 <div id="curtain" aria-hidden="true">
   <div class="c-half c-left"></div>
   <div class="c-half c-right"></div>
 </div>
 
-<!-- ── Seal shown at panel seam ────────────────── -->
 <div id="seal" aria-hidden="true">
   <svg viewBox="0 0 80 80" width="80" height="80">
     <circle cx="40" cy="40" r="36" style="stroke:var(--pale);fill:none" stroke-width="0.8"/>
-    <circle cx="40" cy="40" r="28" style="stroke:var(--pale);fill:none"
-      stroke-width="0.4" stroke-dasharray="2 2.5"/>
+    <circle cx="40" cy="40" r="28" style="stroke:var(--pale);fill:none" stroke-width="0.4" stroke-dasharray="2 2.5"/>
     <line x1="40" y1="3"  x2="40" y2="9"  style="stroke:var(--pale)" stroke-width="0.8"/>
     <line x1="40" y1="71" x2="40" y2="77" style="stroke:var(--pale)" stroke-width="0.8"/>
     <line x1="3"  y1="40" x2="9"  y2="40" style="stroke:var(--pale)" stroke-width="0.8"/>
     <line x1="71" y1="40" x2="77" y2="40" style="stroke:var(--pale)" stroke-width="0.8"/>
     <text x="40" y="38" text-anchor="middle"
-      style="fill:var(--accent);font-family:Palatino Linotype,Book Antiqua,Palatino,Georgia,serif;font-size:10px;font-style:italic">
-      A &amp; L
-    </text>
+      style="fill:var(--accent);font-family:Palatino Linotype,Book Antiqua,Palatino,Georgia,serif;font-size:10px;font-style:italic">A &amp; L</text>
     <text x="40" y="49" text-anchor="middle"
-      style="fill:var(--sub);font-family:Palatino Linotype,Book Antiqua,Palatino,Georgia,serif;font-size:4.5px;letter-spacing:1px">
-      30 · IX · MMXXVI
-    </text>
+      style="fill:var(--sub);font-family:Palatino Linotype,Book Antiqua,Palatino,Georgia,serif;font-size:4.5px;letter-spacing:1px">30 · IX · MMXXVI</text>
   </svg>
 </div>
 
-<!-- ── Invitation content ───────────────────────── -->
 <div id="content">
   <main class="page">
 
-    <div class="spine" style="height:52px" role="presentation"></div>
+    <div class="spine" style="height:38px" role="presentation"></div>
 
-    <div class="frame">
-      <!-- Corner ornaments -->
+    <div class="frame" id="card">
       <svg class="corner corner-tl" viewBox="0 0 44 44" aria-hidden="true"><use href="#csym"/></svg>
       <svg class="corner corner-tr" viewBox="0 0 44 44" aria-hidden="true"><use href="#csym"/></svg>
       <svg class="corner corner-bl" viewBox="0 0 44 44" aria-hidden="true"><use href="#csym"/></svg>
       <svg class="corner corner-br" viewBox="0 0 44 44" aria-hidden="true"><use href="#csym"/></svg>
 
-      <!-- Hero -->
       <div class="hero">
         <p class="eyebrow">Together with their families</p>
         <h1>Alif N <span class="amp">&amp;</span> Lis W</h1>
         <p class="wdate">Wednesday · The Thirtieth of September<br>Two Thousand and Twenty-Six</p>
       </div>
 
-      <!-- Divider -->
       <div class="div" role="separator">
         <div class="div-line"></div>
-        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><use href="#diam"/></svg>
+        <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><use href="#diam"/></svg>
         <div class="div-line"></div>
       </div>
 
-      <!-- Countdown -->
       <div class="cd">
         <p class="eyebrow">Until we say I do</p>
         <div class="cd-row">
@@ -321,67 +325,111 @@
         </div>
       </div>
 
-      <!-- Divider -->
       <div class="div" role="separator">
         <div class="div-line"></div>
-        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><use href="#diam"/></svg>
+        <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><use href="#diam"/></svg>
         <div class="div-line"></div>
       </div>
 
-      <!-- Venue -->
       <div class="venue">
         <p class="eyebrow">Ceremony &amp; Reception</p>
         <p class="venue-nm">Todanan, Blora</p>
         <p class="venue-loc">Kecamatan Todanan · Kabupaten Blora<br>Jawa Tengah, Indonesia</p>
       </div>
 
-      <!-- Divider -->
       <div class="div" role="separator">
         <div class="div-line"></div>
-        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><use href="#diam"/></svg>
+        <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><use href="#diam"/></svg>
         <div class="div-line"></div>
       </div>
 
-      <!-- Closing -->
-      <p class="closing">
-        We would be honoured<br>
-        to share this day with you.
-      </p>
+      <p class="closing">We would be honoured<br>to share this day with you.</p>
+
+      <button class="rsvp-btn" id="rsvpBtn">We'll be there</button>
     </div>
 
-    <div class="spine" style="height:40px" role="presentation"></div>
+    <div class="spine" style="height:28px" role="presentation"></div>
   </main>
 </div>
 
 <script>
+  /* ── Entrance ─────────────────────────────────── */
   const curtain = document.getElementById('curtain');
   const seal    = document.getElementById('seal');
   const content = document.getElementById('content');
 
-  // Apply initial hidden state via JS (graceful degradation: visible if JS fails)
   content.classList.add('entering');
 
-  function openCurtain() {
+  function hideCurtain() { curtain.style.display = seal.style.display = 'none'; }
+
+  setTimeout(() => {
     curtain.classList.add('open');
     seal.classList.add('hide');
     content.classList.remove('entering');
     content.classList.add('show');
-  }
+  }, 500);
 
-  function hideCurtain() {
-    curtain.style.display = 'none';
-    seal.style.display = 'none';
-  }
-
-  setTimeout(openCurtain, 500);
-
-  // Primary: remove curtain on transitionend
   curtain.addEventListener('transitionend', hideCurtain, { once: true });
-  // Fallback: force-remove after animation + buffer, in case transitionend misfires
   setTimeout(hideCurtain, 2200);
 
-  // Countdown — update time to match your ceremony schedule
+  /* ── Heart burst ──────────────────────────────── */
+  const CHARS = ['♥', '✦', '❋', '·', '✿'];
+
+  function burst(cx, cy, n = 10) {
+    for (let i = 0; i < n; i++) {
+      const el = document.createElement('span');
+      el.className = 'hp';
+      el.textContent = CHARS[i % CHARS.length];
+      const dx = (Math.random() - 0.5) * 110;
+      const r  = (Math.random() - 0.5) * 45;
+      el.style.cssText =
+        `left:${cx}px;top:${cy}px;--dx:${dx}px;--r:${r}deg;` +
+        `font-size:${0.6 + Math.random() * 0.9}rem`;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    }
+  }
+
+  /* Click anywhere on card → burst (skip RSVP button, handled below) */
+  document.getElementById('card').addEventListener('click', e => {
+    if (e.target.closest('.rsvp-btn')) return;
+    burst(e.clientX, e.clientY);
+  });
+
+  /* RSVP → triple burst + state change */
+  document.getElementById('rsvpBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => burst(
+        e.clientX + (Math.random() - 0.5) * 60,
+        e.clientY + (Math.random() - 0.5) * 40,
+        9
+      ), i * 130);
+    }
+    this.textContent = 'See you on the day ✦';
+    this.classList.add('confirmed');
+  });
+
+  /* ── 3D card tilt on mouse ────────────────────── */
+  const card = document.getElementById('card');
+
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform 0.12s ease';
+  });
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  - 0.5) * 9;
+    const y = ((e.clientY - r.top)  / r.height - 0.5) * -9;
+    card.style.transform = `perspective(900px) rotateY(${x}deg) rotateX(${y}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform 0.5s ease';
+    card.style.transform  = '';
+  });
+
+  /* ── Countdown ────────────────────────────────── */
   const target = new Date('2026-09-30T08:00:00');
+  const sEl    = document.getElementById('s');
 
   function pad(n, w = 2) { return String(n).padStart(w, '0'); }
 
@@ -396,10 +444,18 @@
     const tm = Math.floor(ts / 60);
     const th = Math.floor(tm / 60);
     const td = Math.floor(th / 24);
+
     document.getElementById('d').textContent = pad(td, 3);
     document.getElementById('h').textContent = pad(th % 24);
     document.getElementById('m').textContent = pad(tm % 60);
-    document.getElementById('s').textContent = pad(ts % 60);
+
+    const ns = pad(ts % 60);
+    if (sEl.textContent !== ns) {
+      sEl.textContent = ns;
+      sEl.classList.remove('pulse');
+      void sEl.offsetWidth;
+      sEl.classList.add('pulse');
+    }
   }
 
   tick();
