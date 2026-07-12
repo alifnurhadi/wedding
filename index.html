@@ -30,17 +30,17 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 .psign:hover{filter:brightness(1.25)}
 .psign-board{
   background:#6B3A18;
-  border:2px solid #3A1A05;
-  box-shadow:inset 0 1px 0 rgba(255,210,130,.18),2px 3px 5px rgba(0,0,0,.55);
+  border:1.5px solid #3A1A05;
+  box-shadow:inset 0 1px 0 rgba(255,210,130,.18),1px 2px 4px rgba(0,0,0,.55);
   color:#F5E6C0;
-  font-family:inherit;font-size:.42rem;
-  text-align:center;padding:4px 9px 5px;
-  letter-spacing:.07em;text-transform:uppercase;
-  white-space:nowrap;line-height:1.45;
+  font-family:inherit;font-size:.34rem;
+  text-align:center;padding:2px 6px 2px;
+  letter-spacing:.06em;text-transform:uppercase;
+  white-space:nowrap;line-height:1.4;
   animation:sglow 3s ease-in-out infinite;
 }
-.psign-cam{display:block;font-size:11px;margin-bottom:1px}
-.psign-post{width:4px;height:14px;background:linear-gradient(to right,#3A1A08,#7A4018,#3A1A08)}
+.psign-cam{display:block;font-size:8px;margin-bottom:0}
+.psign-post{width:3px;height:8px;background:linear-gradient(to right,#3A1A08,#7A4018,#3A1A08)}
 @keyframes sglow{
   0%,100%{box-shadow:inset 0 1px 0 rgba(255,210,130,.18),2px 3px 5px rgba(0,0,0,.55),0 0 0 rgba(255,195,70,0)}
   50%{box-shadow:inset 0 1px 0 rgba(255,210,130,.18),2px 3px 5px rgba(0,0,0,.55),0 0 10px rgba(255,195,70,.45)}
@@ -115,8 +115,8 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 .ibody{font-size:.62rem;line-height:1.9;color:#c0a880;white-space:pre-line}
 .idiv{width:30px;height:1px;background:var(--gold);margin:.65rem auto}
 
-/* Mobile portrait: rotate map to landscape */
-@media (max-width:767px) and (orientation:portrait){
+/* Mobile portrait: rotate map to landscape (touch devices only — desktop never rotates) */
+@media (pointer:coarse) and (max-width:767px) and (orientation:portrait){
   body{overflow:hidden}
   header,.hint{visibility:hidden;pointer-events:none}
   .map-wrap{
@@ -204,8 +204,7 @@ const OBJS=[
   {t:'tree',x:14,y:6},{t:'tree',x:19,y:5},
   {t:'tree',x:14,y:9},{t:'tree',x:15,y:9},{t:'tree',x:14,y:10},
   {t:'building',x:9,y:1},
-  {t:'wall',x:6,y:1},          // floral photo wall (2×2)
-  {t:'bride',x:6,y:3},         // bride stands beside the wall
+  {t:'wall',x:6,y:1},
   {t:'arch',x:10,y:3},
   {t:'flower',x:4,y:4,c:'#F48FB1'},{t:'flower',x:5,y:3,c:'#FFD54F'},
   {t:'flower',x:4,y:5,c:'#FF80AB'},{t:'flower',x:6,y:4,c:'#F48FB1'},
@@ -218,20 +217,20 @@ const OBJS=[
   {t:'lantern',x:17,y:9},{t:'lantern',x:19,y:10},
   {t:'table',x:16,y:11},{t:'table',x:18,y:12},
   {t:'flower',x:19,y:11,c:'#F48FB1'},{t:'flower',x:17,y:12,c:'#FFD54F'},
-  {t:'groom',x:10,y:6},
-  {t:'bride',x:10,y:7},
+  {t:'groom',x:6,y:3},
+  {t:'bride',x:7,y:3},
 ];
 
 const SPOTS=[
-  {id:'wall',      label:'Photo Wall', tx:7.5, ty:2.5,
+  {id:'wall',      label:'Photo Wall', tx:7.5, ty:2.2,
    title:'Floral Photo Wall', sub:'Stand by the backdrop · Rose frame', theme:'wall'},
-  {id:'garden',    label:'Garden',     tx:5.5, ty:5.5,
+  {id:'garden',    label:'Garden',     tx:4.5, ty:6.5,
    title:'Garden in Bloom',  sub:'Floral field · Garden frame',          theme:'garden'},
-  {id:'lake',      label:'Lake',       tx:2.5, ty:11.0,
+  {id:'lake',      label:'Lake',       tx:2.5, ty:10.5,
    title:'Waterside Dream',  sub:'Reflection · Water frame',              theme:'water'},
-  {id:'forest',    label:'Forest',     tx:17.5,ty:6.5,
+  {id:'forest',    label:'Forest',     tx:16.5,ty:7.5,
    title:'Forest Glade',     sub:'Woodland walk · Forest frame',          theme:'forest'},
-  {id:'reception', label:'Reception',  tx:18.0,ty:11.5,
+  {id:'reception', label:'Reception',  tx:19.0,ty:12.0,
    title:'Reception Hall',   sub:'Celebrate together · Grand frame',      theme:'reception'},
 ];
 
@@ -239,10 +238,10 @@ const INFO=[
   {tx:10.5,ty:1.5,
    title:'Save the Date',
    body:'30 September 2026\n\nGedung Pernikahan Todanan\nBlora, Central Java, Indonesia\n\nAlif N ♥ Lis W'},
-  {tx:5.5,ty:4.0,
+  {tx:8.0,ty:7.5,
    title:'From Our Hearts',
    body:'"We found in each other\nwhat we had been searching for —\na partner, a best friend, and a home.\n\nWe are getting married because\ntogether, we are our best selves."'},
-  {tx:17.5,ty:11.5,
+  {tx:16.0,ty:10.0,
    title:'Join the Celebration',
    body:'"A great marriage is not when\nthe perfect couple comes together.\nIt is when an imperfect couple learns\nto enjoy their differences."\n\n— Dave Meurer\n\nCome eat, laugh, and dance with us! 🎉'},
 ];
@@ -455,7 +454,7 @@ function bride(tx,ty){
 }
 
 function hearts(){
-  const bx=px(10)+TW/2,by=py(6.5);
+  const bx=px(6.5)+TW/2,by=py(3);
   [[-16,-9,0],[16,-14,1.1],[0,-22,.55]].forEach(([ox,oy,ph])=>{
     const bob=Math.sin(heartT+ph)*4;
     const a=(Math.sin(heartT*.7+ph)+1)*.38;
