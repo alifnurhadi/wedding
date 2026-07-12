@@ -12,7 +12,6 @@ header{text-align:center}
 header h1{font-size:clamp(1rem,4vw,1.7rem);font-style:italic;color:var(--gold);letter-spacing:.12em}
 header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6a5030;margin-top:.2rem}
 
-/* Map */
 .map-wrap{
   position:relative;width:100%;max-width:840px;
   border:3px solid #221404;
@@ -20,39 +19,59 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 }
 #mapCanvas{display:block;width:100%;height:auto;image-rendering:pixelated}
 
-/* Hotspot markers */
-.spot{
+/* Photo signs */
+.psign{
+  position:absolute;transform:translate(-50%,-100%);
+  z-index:5;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;
+  border:none;background:none;padding:0;
+  transition:filter .15s;
+}
+.psign:hover{filter:brightness(1.25)}
+.psign-board{
+  background:#6B3A18;
+  border:2px solid #3A1A05;
+  box-shadow:inset 0 1px 0 rgba(255,210,130,.18),2px 3px 5px rgba(0,0,0,.55);
+  color:#F5E6C0;
+  font-family:inherit;font-size:.42rem;
+  text-align:center;padding:4px 9px 5px;
+  letter-spacing:.07em;text-transform:uppercase;
+  white-space:nowrap;line-height:1.45;
+  animation:sglow 3s ease-in-out infinite;
+}
+.psign-cam{display:block;font-size:11px;margin-bottom:1px}
+.psign-post{width:4px;height:14px;background:linear-gradient(to right,#3A1A08,#7A4018,#3A1A08)}
+@keyframes sglow{
+  0%,100%{box-shadow:inset 0 1px 0 rgba(255,210,130,.18),2px 3px 5px rgba(0,0,0,.55),0 0 0 rgba(255,195,70,0)}
+  50%{box-shadow:inset 0 1px 0 rgba(255,210,130,.18),2px 3px 5px rgba(0,0,0,.55),0 0 10px rgba(255,195,70,.45)}
+}
+
+/* Info signs */
+.isign{
   position:absolute;transform:translate(-50%,-50%);
-  width:38px;height:38px;border-radius:50%;border:none;
-  background:rgba(255,255,255,.13);cursor:pointer;
+  z-index:5;cursor:pointer;
+  width:20px;height:20px;border-radius:50%;
+  background:#F5EFE0;border:1.5px solid #C9AD8A;
+  color:#7A5020;font-size:10px;
   display:flex;align-items:center;justify-content:center;
-  font-size:17px;padding:0;z-index:5;transition:transform .15s;
+  animation:iglow 2.6s ease-in-out infinite;
+  border:none;
 }
-.spot::after{
-  content:'';position:absolute;inset:-5px;border-radius:50%;
-  border:2px solid rgba(255,210,80,.65);
-  animation:ring 2.2s ease-in-out infinite;
+.isign:hover{background:#C9AD8A;color:#fff}
+@keyframes iglow{
+  0%,100%{box-shadow:0 0 0 rgba(200,170,100,0),0 0 0 1.5px #C9AD8A}
+  50%{box-shadow:0 0 9px rgba(200,170,100,.6),0 0 0 1.5px #C9AD8A}
 }
-.spot:hover{transform:translate(-50%,-50%) scale(1.22)}
-@keyframes ring{0%,100%{transform:scale(1);opacity:.7}55%{transform:scale(1.48);opacity:.12}}
-.stip{
-  position:absolute;bottom:calc(100% + 7px);left:50%;
-  transform:translateX(-50%);white-space:nowrap;
-  background:rgba(10,5,0,.94);border:1px solid var(--gold);
-  color:var(--gold);font-size:.49rem;letter-spacing:.18em;
-  text-transform:uppercase;padding:.2rem .55rem;
-  pointer-events:none;opacity:0;transition:opacity .2s;
-}
-.spot:hover .stip,.spot:focus .stip{opacity:1}
+
 .hint{font-size:.53rem;text-transform:uppercase;letter-spacing:.2em;color:#4a3010}
 
-/* Modal */
-#modal{
+/* Photo modal */
+#photoM{
   display:none;position:fixed;inset:0;z-index:50;
   background:rgba(5,2,0,.93);
   align-items:center;justify-content:center;padding:1rem;
 }
-#modal.open{display:flex}
+#photoM.open{display:flex}
 .mbox{
   background:#0E0904;border:1px solid var(--gold);
   width:100%;max-width:450px;
@@ -79,6 +98,38 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 .mcls{position:absolute;top:.48rem;right:.55rem;background:none;border:none;color:#5a3810;font-size:1.1rem;cursor:pointer;line-height:1;padding:.2rem}
 .mcls:hover{color:var(--gold)}
 #stxt{font-size:.51rem;text-transform:uppercase;letter-spacing:.14em;color:#5a3810;text-align:center;min-height:1em}
+
+/* Info modal */
+#infoM{
+  display:none;position:fixed;inset:0;z-index:50;
+  background:rgba(5,2,0,.92);
+  align-items:center;justify-content:center;padding:1.5rem;
+}
+#infoM.open{display:flex}
+.ibox{
+  background:#0E0904;border:1px solid var(--gold);
+  width:100%;max-width:360px;
+  padding:1.6rem 1.2rem 1.3rem;position:relative;text-align:center;
+}
+.ittl{font-size:.85rem;font-style:italic;color:var(--gold);letter-spacing:.1em;margin-bottom:.7rem}
+.ibody{font-size:.62rem;line-height:1.9;color:#c0a880;white-space:pre-line}
+.idiv{width:30px;height:1px;background:var(--gold);margin:.65rem auto}
+
+/* Mobile portrait: rotate map to landscape */
+@media (max-width:767px) and (orientation:portrait){
+  body{overflow:hidden}
+  header,.hint{visibility:hidden;pointer-events:none}
+  .map-wrap{
+    position:fixed !important;
+    width:150vw !important;
+    max-width:none !important;
+    left:-25vw;
+    top:calc(50vh - 50vw);
+    transform:rotate(90deg);
+    transform-origin:75vw 50vw;
+    z-index:10;
+  }
+}
 </style>
 
 <header>
@@ -89,13 +140,14 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
 <div class="map-wrap" id="mapWrap">
   <canvas id="mapCanvas" width="840" height="560"></canvas>
 </div>
-<p class="hint">✦ Tap a glowing spot to take your wedding photo ✦</p>
+<p class="hint">✦ Tap a glowing sign to take your photo · Tap ✦ for wedding notes ✦</p>
 
-<div id="modal">
+<!-- Photo modal -->
+<div id="photoM">
   <div class="mbox">
     <button class="mcls" id="closeBtn">✕</button>
-    <p class="mtitle" id="mttl">Chapel Moment</p>
-    <p class="msub"  id="msub">Ceremony photo frame</p>
+    <p class="mtitle" id="mttl"></p>
+    <p class="msub"   id="msub"></p>
     <div class="camwrap">
       <video id="vid" autoplay playsinline muted></video>
       <canvas id="fc"></canvas>
@@ -110,13 +162,21 @@ header p{font-size:.53rem;text-transform:uppercase;letter-spacing:.25em;color:#6
   </div>
 </div>
 
+<!-- Info modal -->
+<div id="infoM">
+  <div class="ibox">
+    <button class="mcls" id="iclose">✕</button>
+    <p class="ittl" id="ittl"></p>
+    <div class="idiv"></div>
+    <p class="ibody" id="ibody"></p>
+  </div>
+</div>
+
 <script>
-// ── Map constants ───────────────────────────────────
 const COLS=21,ROWS=14,CW=840,CH=560;
-const TW=CW/COLS,TH=CH/ROWS; // 40×40
+const TW=CW/COLS,TH=CH/ROWS;
 function px(c){return c*TW} function py(r){return r*TH}
 
-// 0=deep water  1=grass  2=path  3=lake
 const MAP=[
   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
   [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
@@ -134,63 +194,63 @@ const MAP=[
   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 ];
 
-// Objects: t=type, x/y=tile col/row, c=color option
 const OBJS=[
-  // Trees — top-left cluster
   ...[1,2,3,4].flatMap(x=>[1,2,3].map(y=>({t:'tree',x,y}))),
   {t:'tree',x:5,y:1},{t:'tree',x:5,y:2},
-  // Trees — top-right cluster
   ...[13,14,15,16].flatMap(x=>[1,2].map(y=>({t:'tree',x,y}))),
   {t:'tree',x:12,y:1},{t:'tree',x:17,y:1},
-  // Trees — mid-left
   ...[1,2].flatMap(x=>[6,7,8].map(y=>({t:'tree',x,y}))),
-  // Trees — mid-right
   ...[15,16,17,18].flatMap(x=>[5,6,7,8].map(y=>({t:'tree',x,y}))),
   {t:'tree',x:14,y:6},{t:'tree',x:19,y:5},
-  // Trees — bottom-right corner
   {t:'tree',x:14,y:9},{t:'tree',x:15,y:9},{t:'tree',x:14,y:10},
-  // Wedding venue (2×2 tiles)
   {t:'building',x:9,y:1},
-  // Arch at path entrance
+  {t:'wall',x:6,y:1},          // floral photo wall (2×2)
+  {t:'bride',x:6,y:3},         // bride stands beside the wall
   {t:'arch',x:10,y:3},
-  // Flowers — left garden
-  {t:'flower',x:5,y:3,c:'#F48FB1'},{t:'flower',x:6,y:4,c:'#FFD54F'},
-  {t:'flower',x:4,y:5,c:'#FF80AB'},{t:'flower',x:7,y:5,c:'#F48FB1'},
+  {t:'flower',x:4,y:4,c:'#F48FB1'},{t:'flower',x:5,y:3,c:'#FFD54F'},
+  {t:'flower',x:4,y:5,c:'#FF80AB'},{t:'flower',x:6,y:4,c:'#F48FB1'},
   {t:'flower',x:5,y:7,c:'#FFD54F'},{t:'flower',x:6,y:8,c:'#FF80AB'},
-  // Flowers — right garden
   {t:'flower',x:12,y:3,c:'#FFD54F'},{t:'flower',x:13,y:4,c:'#F48FB1'},
   {t:'flower',x:12,y:7,c:'#FF80AB'},{t:'flower',x:13,y:8,c:'#FFD54F'},
   {t:'flower',x:11,y:10,c:'#F48FB1'},{t:'flower',x:12,y:11,c:'#FF80AB'},
-  // Rocks
   {t:'rock',x:7,y:10},{t:'rock',x:13,y:11},{t:'rock',x:8,y:8},
-  // Lily pads on lake
   {t:'lily',x:1,y:9},{t:'lily',x:2,y:11},{t:'lily',x:3,y:12},
-  // Reception corner
   {t:'lantern',x:17,y:9},{t:'lantern',x:19,y:10},
   {t:'table',x:16,y:11},{t:'table',x:18,y:12},
   {t:'flower',x:19,y:11,c:'#F48FB1'},{t:'flower',x:17,y:12,c:'#FFD54F'},
-  // Couple on the path
   {t:'groom',x:10,y:6},
   {t:'bride',x:10,y:7},
 ];
 
 const SPOTS=[
-  {id:'chapel',   icon:'💒',label:'Chapel',    tx:10.5,ty:2.5,
-   title:'Chapel Moment',   sub:'Say "I do" · Ceremony frame',    theme:'chapel'},
-  {id:'garden',   icon:'🌸',label:'Garden',    tx:5.5, ty:5.5,
-   title:'Garden in Bloom', sub:'Floral field · Garden frame',     theme:'garden'},
-  {id:'lake',     icon:'🌊',label:'Lake',      tx:2.5, ty:11.0,
-   title:'Waterside Dream', sub:'Reflection · Water frame',        theme:'water'},
-  {id:'forest',   icon:'🌲',label:'Forest',    tx:17.5,ty:6.5,
-   title:'Forest Glade',    sub:'Woodland walk · Forest frame',    theme:'forest'},
-  {id:'reception',icon:'🎊',label:'Reception', tx:18.0,ty:11.5,
-   title:'Reception Hall',  sub:'Celebrate together · Grand frame',theme:'reception'},
+  {id:'wall',      label:'Photo Wall', tx:7.5, ty:2.5,
+   title:'Floral Photo Wall', sub:'Stand by the backdrop · Rose frame', theme:'wall'},
+  {id:'garden',    label:'Garden',     tx:5.5, ty:5.5,
+   title:'Garden in Bloom',  sub:'Floral field · Garden frame',          theme:'garden'},
+  {id:'lake',      label:'Lake',       tx:2.5, ty:11.0,
+   title:'Waterside Dream',  sub:'Reflection · Water frame',              theme:'water'},
+  {id:'forest',    label:'Forest',     tx:17.5,ty:6.5,
+   title:'Forest Glade',     sub:'Woodland walk · Forest frame',          theme:'forest'},
+  {id:'reception', label:'Reception',  tx:18.0,ty:11.5,
+   title:'Reception Hall',   sub:'Celebrate together · Grand frame',      theme:'reception'},
 ];
 
-// ── Canvas drawing ───────────────────────────────────
+const INFO=[
+  {tx:10.5,ty:1.5,
+   title:'Save the Date',
+   body:'30 September 2026\n\nGedung Pernikahan Todanan\nBlora, Central Java, Indonesia\n\nAlif N ♥ Lis W'},
+  {tx:5.5,ty:4.0,
+   title:'From Our Hearts',
+   body:'"We found in each other\nwhat we had been searching for —\na partner, a best friend, and a home.\n\nWe are getting married because\ntogether, we are our best selves."'},
+  {tx:17.5,ty:11.5,
+   title:'Join the Celebration',
+   body:'"A great marriage is not when\nthe perfect couple comes together.\nIt is when an imperfect couple learns\nto enjoy their differences."\n\n— Dave Meurer\n\nCome eat, laugh, and dance with us! 🎉'},
+];
+
+// ── Canvas drawing ──────────────────────────────────
 const canvas=document.getElementById('mapCanvas');
 const ctx=canvas.getContext('2d');
-let animT=0, heartT=0;
+let animT=0,heartT=0;
 
 function tile(type,col,row){
   const x=px(col),y=py(row);
@@ -212,7 +272,7 @@ function tile(type,col,row){
     ctx.fillStyle='#B49050';
     ctx.fillRect(x,y,3,TH); ctx.fillRect(x+TW-3,y,3,TH);
     ctx.fillStyle='#D6B878'; ctx.fillRect(x+5,y+5,TW-12,2);
-  } else { // lake
+  } else {
     const d=(col+row)*.035;
     ctx.fillStyle=`rgb(${Math.round(60+d*20)},${Math.round(148+d*15)},${Math.round(218+d*10)})`;
     ctx.fillRect(x,y,TW,TH);
@@ -224,8 +284,7 @@ function tile(type,col,row){
 }
 
 function tree(tx,ty){
-  const x=px(tx),y=py(ty);
-  const cx=x+TW*.5,by=y+TH;
+  const x=px(tx),y=py(ty),cx=x+TW*.5,by=y+TH;
   ctx.fillStyle='rgba(0,20,0,.16)';
   ctx.beginPath(); ctx.ellipse(cx+2,by-5,TW*.4,5,0,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='#5A3618'; ctx.fillRect(cx-4,by-14,8,11);
@@ -238,6 +297,46 @@ function tree(tx,ty){
   });
   ctx.fillStyle='#65BB65';
   ctx.beginPath(); ctx.arc(cx-TW*.12,y+TH*.28,TW*.14,0,Math.PI*2); ctx.fill();
+}
+
+function wall(tx,ty){
+  const x=px(tx),y=py(ty),w=TW*2,h=TH*2;
+  ctx.save();
+  // Panel
+  ctx.fillStyle='#F5EDE0'; ctx.fillRect(x,y,w,h);
+  // Gold trim frame
+  ctx.strokeStyle='#C9AD8A'; ctx.lineWidth=2.5; ctx.strokeRect(x+2,y+2,w-4,h-4);
+  ctx.strokeStyle='#9A7840'; ctx.lineWidth=1; ctx.strokeRect(x+5,y+5,w-10,h-10);
+  // Flower clusters at 4 corners
+  const petal=(cx,cy,r,col)=>{
+    ctx.fillStyle=col;
+    for(let a=0;a<6;a++){
+      const ag=a*Math.PI/3;
+      ctx.beginPath(); ctx.arc(cx+Math.cos(ag)*r,cy+Math.sin(ag)*r,r*.6,0,Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle='#FFF9C4'; ctx.beginPath(); ctx.arc(cx,cy,r*.4,0,Math.PI*2); ctx.fill();
+    // leaves
+    ctx.fillStyle='#66BB6A';
+    [45,165,285].forEach(a=>{
+      const ag=a*Math.PI/180;
+      ctx.beginPath();
+      ctx.ellipse(cx+Math.cos(ag)*r*1.55,cy+Math.sin(ag)*r*1.55,r*.55,r*.25,ag,0,Math.PI*2);
+      ctx.fill();
+    });
+  };
+  const r=7;
+  petal(x+14,y+14,r,'#F48FB1'); petal(x+w-14,y+14,r,'#CE93D8');
+  petal(x+14,y+h-14,r,'#CE93D8'); petal(x+w-14,y+h-14,r,'#F48FB1');
+  // Monogram A♥L
+  ctx.fillStyle='#8B6B45';
+  ctx.font=`italic bold ${h*.32}px Georgia,serif`;
+  ctx.textAlign='center';
+  ctx.fillText('A♥L',x+w/2,y+h*.56);
+  ctx.fillStyle='#B89060';
+  ctx.font=`${h*.12}px Georgia,serif`;
+  ctx.fillText('30.IX.MMXXVI',x+w/2,y+h*.78);
+  ctx.textAlign='start';
+  ctx.restore();
 }
 
 function building(tx,ty){
@@ -256,8 +355,7 @@ function building(tx,ty){
   [[14,h*.4],[w-28,h*.4]].forEach(([ox,oy])=>{
     ctx.fillStyle='#B0DAFF'; ctx.fillRect(x+ox,y+oy,14,13);
     ctx.fillStyle='#5A3818';
-    ctx.fillRect(x+ox+6,y+oy,2,13);
-    ctx.fillRect(x+ox,y+oy+5,14,2);
+    ctx.fillRect(x+ox+6,y+oy,2,13); ctx.fillRect(x+ox,y+oy+5,14,2);
   });
   ctx.fillStyle='#C09660'; ctx.fillRect(x+w/2-4,y+4,8,22);
   ctx.fillStyle='#A07848'; ctx.fillRect(x+w/2-4,y+4,2,22);
@@ -270,15 +368,11 @@ function arch(tx,ty){
   ctx.fillStyle='#FFD700';
   ctx.fillRect(cx-14,y+8,7,4); ctx.fillRect(cx+7,y+8,7,4);
   ctx.fillRect(cx-14,y+s-10,7,4); ctx.fillRect(cx+7,y+s-10,7,4);
-  const pts=[[0,0],[3,-5],[7,-9],[11,-12],[16,-14],[20,-14],[24,-12],[28,-9],[31,-5],[33,0]];
-  ctx.fillStyle='#F5EFE0';
-  pts.forEach(([ax,ay])=>ctx.fillRect(cx-14+ax,y+8+ay,5,5));
-  ctx.fillStyle='#FFD700';
-  ctx.beginPath(); ctx.arc(cx,y+2,4,0,Math.PI*2); ctx.fill();
+  [[0,0],[3,-5],[7,-9],[11,-12],[16,-14],[20,-14],[24,-12],[28,-9],[31,-5],[33,0]].forEach(([ax,ay])=>
+    ctx.fillRect(cx-14+ax,y+8+ay,5,5));
+  ctx.fillStyle='#FFD700'; ctx.beginPath(); ctx.arc(cx,y+2,4,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='#F48FB1';
-  [cx-10,cx,cx+10].forEach(fx=>{
-    ctx.beginPath(); ctx.arc(fx,y+s*.42,3,0,Math.PI*2); ctx.fill();
-  });
+  [cx-10,cx,cx+10].forEach(fx=>{ctx.beginPath(); ctx.arc(fx,y+s*.42,3,0,Math.PI*2); ctx.fill();});
 }
 
 function flower(tx,ty,c){
@@ -304,12 +398,10 @@ function lily(tx,ty){
 }
 
 function lantern(tx,ty){
-  const x=px(tx)+TW/2,top=py(ty);
-  const body=top+TH*.2;
+  const x=px(tx)+TW/2,top=py(ty),body=top+TH*.2;
   ctx.strokeStyle='#8a6040'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,body-1); ctx.stroke();
-  ctx.fillStyle='rgba(255,165,0,.14)';
-  ctx.beginPath(); ctx.arc(x,body+9,18,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(255,165,0,.14)'; ctx.beginPath(); ctx.arc(x,body+9,18,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='#E53935'; ctx.fillRect(x-7,body,14,18);
   ctx.fillStyle='#FF8A80'; ctx.fillRect(x-5,body+4,10,4);
   ctx.fillStyle='#FFD700';
@@ -331,24 +423,20 @@ function table(tx,ty){
 
 function groom(tx,ty){
   const x=px(tx)+TW/2,y=py(ty)+2,s=TH;
-  ctx.fillStyle='rgba(0,0,0,.15)';
-  ctx.beginPath(); ctx.ellipse(x,y+s-4,8,4,0,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#0C0C1A';
-  ctx.fillRect(x-6,y+s*.88,6,4); ctx.fillRect(x+1,y+s*.88,6,4);
+  ctx.fillStyle='rgba(0,0,0,.15)'; ctx.beginPath(); ctx.ellipse(x,y+s-4,8,4,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#0C0C1A'; ctx.fillRect(x-6,y+s*.88,6,4); ctx.fillRect(x+1,y+s*.88,6,4);
   ctx.fillStyle='#1A2050';
   ctx.fillRect(x-5,y+s*.55,4,s*.35); ctx.fillRect(x+2,y+s*.55,4,s*.35);
   ctx.fillRect(x-6,y+s*.27,13,s*.3);
   ctx.fillStyle='#F5F5F5'; ctx.fillRect(x-2,y+s*.27,5,s*.28);
   ctx.fillStyle='#C9AD8A'; ctx.fillRect(x,y+s*.27,2,s*.26);
-  ctx.fillStyle='#C49060';
-  ctx.beginPath(); ctx.arc(x,y+s*.18,s*.16,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#C49060'; ctx.beginPath(); ctx.arc(x,y+s*.18,s*.16,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='#1A0A00'; ctx.fillRect(x-s*.14,y+s*.04,s*.28,s*.1);
 }
 
 function bride(tx,ty){
   const x=px(tx)+TW/2,y=py(ty)+2,s=TH;
-  ctx.fillStyle='rgba(0,0,0,.15)';
-  ctx.beginPath(); ctx.ellipse(x,y+s-4,10,4,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(0,0,0,.15)'; ctx.beginPath(); ctx.ellipse(x,y+s-4,10,4,0,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='#F0EAE0';
   ctx.beginPath();
   ctx.moveTo(x-7,y+s*.5); ctx.lineTo(x+7,y+s*.5);
@@ -358,12 +446,9 @@ function bride(tx,ty){
   ctx.fillStyle='#F5F0EA'; ctx.fillRect(x-5,y+s*.3,10,s*.22);
   ctx.fillStyle='#C49060';
   ctx.fillRect(x-9,y+s*.3,3,s*.18); ctx.fillRect(x+6,y+s*.3,3,s*.18);
-  ctx.fillStyle='#E91E63';
-  ctx.beginPath(); ctx.arc(x-9,y+s*.46,5,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#F8BBD9';
-  ctx.beginPath(); ctx.arc(x-7,y+s*.43,3,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#C49060';
-  ctx.beginPath(); ctx.arc(x,y+s*.18,s*.16,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#E91E63'; ctx.beginPath(); ctx.arc(x-9,y+s*.46,5,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#F8BBD9'; ctx.beginPath(); ctx.arc(x-7,y+s*.43,3,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#C49060'; ctx.beginPath(); ctx.arc(x,y+s*.18,s*.16,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='#1A0A00'; ctx.fillRect(x-s*.14,y+s*.04,s*.28,s*.09);
   ctx.fillStyle='rgba(245,239,230,.72)'; ctx.fillRect(x,y+s*.05,s*.18,s*.32);
   ctx.fillStyle='#FFD700'; ctx.fillRect(x-4,y+s*.03,8,4);
@@ -375,34 +460,41 @@ function hearts(){
     const bob=Math.sin(heartT+ph)*4;
     const a=(Math.sin(heartT*.7+ph)+1)*.38;
     ctx.fillStyle=`rgba(235,45,110,${a})`;
-    ctx.font='11px serif';
-    ctx.fillText('♥',bx+ox-5,by+oy+bob);
+    ctx.font='11px serif'; ctx.fillText('♥',bx+ox-5,by+oy+bob);
   });
 }
 
-// ── Render loop ───────────────────────────────────────
-const drawFn={tree,building,arch,flower,rock,lily,lantern,table,groom,bride};
+const drawFn={tree,wall,building,arch,flower,rock,lily,lantern,table,groom,bride};
 
 function render(){
   ctx.clearRect(0,0,CW,CH);
   animT+=.016; heartT+=.028;
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) tile(MAP[r][c],c,r);
-  [...OBJS].sort((a,b)=>a.y-b.y).forEach(o=>{
-    if(drawFn[o.t]) drawFn[o.t](o.x,o.y,o.c);
-  });
+  [...OBJS].sort((a,b)=>a.y-b.y).forEach(o=>{if(drawFn[o.t]) drawFn[o.t](o.x,o.y,o.c);});
   hearts();
   requestAnimationFrame(render);
 }
 render();
 
-// ── Spot markers ──────────────────────────────────────
+// ── Photo spot signs ─────────────────────────────────
+const mapWrap=document.getElementById('mapWrap');
 SPOTS.forEach(sp=>{
   const btn=document.createElement('button');
-  btn.className='spot';
-  btn.innerHTML=`${sp.icon}<span class="stip">${sp.label}</span>`;
+  btn.className='psign';
   btn.style.cssText=`left:${(sp.tx/COLS)*100}%;top:${(sp.ty/ROWS)*100}%`;
-  btn.onclick=()=>openModal(sp);
-  document.getElementById('mapWrap').appendChild(btn);
+  btn.innerHTML=`<div class="psign-board"><span class="psign-cam">📷</span>${sp.label}</div><div class="psign-post"></div>`;
+  btn.onclick=()=>openPhoto(sp);
+  mapWrap.appendChild(btn);
+});
+
+// ── Info signs ────────────────────────────────────────
+INFO.forEach(info=>{
+  const btn=document.createElement('button');
+  btn.className='isign';
+  btn.style.cssText=`left:${(info.tx/COLS)*100}%;top:${(info.ty/ROWS)*100}%`;
+  btn.textContent='✦';
+  btn.onclick=()=>openInfo(info);
+  mapWrap.appendChild(btn);
 });
 
 // ── Photo frame overlays ──────────────────────────────
@@ -412,25 +504,32 @@ function drawFrame(theme,w,h,gx){
   gx.textAlign='center';
   const N='Alif N & Lis W',D='30 September 2026 · Blora';
 
-  // Reusable dark-bg text banners
   const darkBanner=(txt,font,y1,y2,fg)=>{
     gx.fillStyle='rgba(8,4,0,.68)'; gx.fillRect(w/2-95,y1,190,y2-y1);
     gx.fillStyle=fg||'#FFD700'; gx.font=font;
     gx.fillText(txt,w/2,y1+(y2-y1)*.65);
   };
 
-  if(theme==='chapel'){
-    gx.strokeStyle='#9A7208'; gx.lineWidth=4; gx.strokeRect(5,5,w-10,h-10);
-    gx.strokeStyle='#FFD700'; gx.lineWidth=1.5; gx.strokeRect(13,13,w-26,h-26);
-    gx.fillStyle='#FFD700';
-    [[13,13],[w-13,13],[13,h-13],[w-13,h-13]].forEach(([cx,cy])=>{
-      gx.beginPath();
-      gx.moveTo(cx,cy-8); gx.lineTo(cx+8,cy); gx.lineTo(cx,cy+8); gx.lineTo(cx-8,cy);
-      gx.closePath(); gx.fill();
-    });
-    // Arch silhouette
-    gx.fillStyle='rgba(255,215,0,.1)';
-    gx.beginPath(); gx.arc(w/2,h*.04,w*.22,Math.PI,0); gx.closePath(); gx.fill();
+  if(theme==='wall'){
+    // Rose floral frame
+    gx.strokeStyle='#7B2D42'; gx.lineWidth=4; gx.strokeRect(5,5,w-10,h-10);
+    gx.strokeStyle='#E91E63'; gx.lineWidth=1.5; gx.strokeRect(13,13,w-26,h-26);
+    const rose=(cx,cy,r)=>{
+      [0,60,120,180,240,300].forEach(a=>{
+        const ag=a*Math.PI/180;
+        gx.fillStyle='#E91E63';
+        gx.beginPath(); gx.arc(cx+Math.cos(ag)*r,cy+Math.sin(ag)*r,r*.6,0,Math.PI*2); gx.fill();
+      });
+      gx.fillStyle='#F8BBD9'; gx.beginPath(); gx.arc(cx,cy,r*.5,0,Math.PI*2); gx.fill();
+      gx.fillStyle='#FCE4EC'; gx.beginPath(); gx.arc(cx,cy,r*.2,0,Math.PI*2); gx.fill();
+      gx.fillStyle='#4CAF50';
+      [30,150,270].forEach(a=>{
+        const ag=a*Math.PI/180;
+        gx.beginPath(); gx.ellipse(cx+Math.cos(ag)*r*1.4,cy+Math.sin(ag)*r*1.4,r*.7,r*.3,ag,0,Math.PI*2); gx.fill();
+      });
+    };
+    const cr=Math.min(w,h)*.085;
+    [[cr*1.3,cr*1.3],[w-cr*1.3,cr*1.3],[cr*1.3,h-cr*1.3],[w-cr*1.3,h-cr*1.3]].forEach(([cx,cy])=>rose(cx,cy,cr));
     darkBanner(N,`italic ${Math.round(h*.042)}px Palatino Linotype,Georgia,serif`,h*.015,h*.092);
     darkBanner(D,`${Math.round(h*.028)}px Palatino Linotype,Georgia,serif`,h*.898,h*.972);
 
@@ -458,7 +557,6 @@ function drawFrame(theme,w,h,gx){
 
   } else if(theme==='water'){
     gx.strokeStyle='#0D47A1'; gx.lineWidth=3; gx.strokeRect(8,8,w-16,h-16);
-    // Wave bands at bottom
     gx.fillStyle='rgba(13,71,161,.32)'; gx.fillRect(0,h*.78,w,h*.22);
     gx.fillStyle='rgba(66,155,230,.33)';
     for(let i=0;i<4;i++){
@@ -467,7 +565,6 @@ function drawFrame(theme,w,h,gx){
         gx.quadraticCurveTo(xw+13,h*(.77+i*.04),xw+26,h*(.8+i*.04));
       gx.lineTo(w,h); gx.lineTo(0,h); gx.closePath(); gx.fill();
     }
-    // Ripple circles top
     gx.strokeStyle='rgba(66,155,230,.28)'; gx.lineWidth=1;
     [[w*.25,h*.14,18],[w*.7,h*.11,14],[w*.5,h*.17,10]].forEach(([cx,cy,r])=>{
       gx.beginPath(); gx.arc(cx,cy,r,0,Math.PI*2); gx.stroke();
@@ -478,14 +575,10 @@ function drawFrame(theme,w,h,gx){
 
   } else if(theme==='forest'){
     gx.strokeStyle='#1B5E20'; gx.lineWidth=3; gx.strokeRect(8,8,w-16,h-16);
-    // Tree silhouette sides
     gx.fillStyle='rgba(27,94,32,.22)';
     [[0,h*.38,1],[w,h*.38,-1],[0,h*.62,1],[w,h*.62,-1]].forEach(([bx,by,d])=>{
-      gx.beginPath();
-      gx.moveTo(bx,by); gx.lineTo(bx+d*44,by-62); gx.lineTo(bx+d*88,by);
-      gx.closePath(); gx.fill();
+      gx.beginPath(); gx.moveTo(bx,by); gx.lineTo(bx+d*44,by-62); gx.lineTo(bx+d*88,by); gx.closePath(); gx.fill();
     });
-    // Leaf corner ornaments
     [[18,18],[w-18,18],[18,h-18],[w-18,h-18]].forEach(([cx,cy])=>{
       gx.fillStyle='#2E7D32';
       for(let a=0;a<6;a++){
@@ -506,30 +599,27 @@ function drawFrame(theme,w,h,gx){
     gx.strokeStyle='rgba(255,215,0,.4)'; gx.strokeRect(17,17,w-34,h-34);
     gx.fillStyle='rgba(184,134,11,.14)';
     gx.fillRect(0,h*.13,w,h*.056); gx.fillRect(0,h*.814,w,h*.056);
-    // Confetti dots along ribbon
     ['#FF8A80','#FFD54F','#80DEEA','#F48FB1'].forEach((c,i)=>{
       gx.fillStyle=c;
       for(let j=i;j<20;j+=4) gx.fillRect(18+j*(w-36)/20,h*.135,5,5);
     });
     gx.fillStyle='#FFD700';
     [[12,12],[w-12,12],[12,h-12],[w-12,h-12]].forEach(([cx,cy])=>{
-      gx.beginPath();
-      gx.moveTo(cx,cy-9); gx.lineTo(cx+9,cy); gx.lineTo(cx,cy+9); gx.lineTo(cx-9,cy);
-      gx.closePath(); gx.fill();
+      gx.beginPath(); gx.moveTo(cx,cy-9); gx.lineTo(cx+9,cy); gx.lineTo(cx,cy+9); gx.lineTo(cx-9,cy); gx.closePath(); gx.fill();
     });
     darkBanner(N,`italic ${Math.round(h*.042)}px Palatino Linotype,Georgia,serif`,h*.015,h*.092);
     darkBanner(D,`${Math.round(h*.028)}px Palatino Linotype,Georgia,serif`,h*.898,h*.972);
   }
 }
 
-// ── Camera modal ──────────────────────────────────────
-const modal =document.getElementById('modal');
+// ── Camera ────────────────────────────────────────────
+const photoM=document.getElementById('photoM');
 const vid   =document.getElementById('vid');
 const fc    =document.getElementById('fc');
 const fCtx  =fc.getContext('2d');
 const fl    =document.getElementById('fl');
 const stxt  =document.getElementById('stxt');
-let stream=null, facing='user', theme='chapel';
+let stream=null,facing='user',theme='wall';
 
 async function startCam(){
   stxt.textContent='Starting camera…';
@@ -552,13 +642,22 @@ vid.addEventListener('loadedmetadata',()=>{
   drawFrame(theme,fc.width,fc.height);
 });
 
-document.getElementById('capBtn').addEventListener('click',()=>{
+document.getElementById('capBtn').addEventListener('click',async()=>{
+  if(!stream||vid.readyState<2){stxt.textContent='Camera not ready yet…';return;}
   const w=vid.videoWidth||640,h=vid.videoHeight||480;
   const out=document.createElement('canvas');
   out.width=w; out.height=h;
   const gx=out.getContext('2d');
+  // Mirror front camera to match what user sees
   if(facing==='user'){gx.translate(w,0);gx.scale(-1,1);}
-  gx.drawImage(vid,0,0,w,h);
+  try{
+    // createImageBitmap captures a reliable still frame from the video
+    const bmp=await createImageBitmap(vid);
+    gx.drawImage(bmp,0,0,w,h);
+    bmp.close();
+  }catch{
+    gx.drawImage(vid,0,0,w,h);
+  }
   gx.setTransform(1,0,0,1,0,0);
   drawFrame(theme,w,h,gx);
   fl.classList.remove('pop'); void fl.offsetWidth; fl.classList.add('pop');
@@ -577,18 +676,36 @@ document.getElementById('flipBtn').addEventListener('click',()=>{
 });
 
 document.getElementById('closeBtn').addEventListener('click',()=>{
-  modal.classList.remove('open');
+  photoM.classList.remove('open');
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
 });
 
-function openModal(sp){
+function openPhoto(sp){
   theme=sp.theme;
   document.getElementById('mttl').textContent=sp.title;
   document.getElementById('msub').textContent=sp.sub;
   document.getElementById('dlBtn').hidden=true;
   stxt.textContent='';
   fc.width=640; fc.height=480; drawFrame(theme,640,480);
-  modal.classList.add('open');
+  photoM.classList.add('open');
   startCam();
 }
+
+// ── Info modal ────────────────────────────────────────
+const infoM=document.getElementById('infoM');
+document.getElementById('iclose').addEventListener('click',()=>infoM.classList.remove('open'));
+
+function openInfo(info){
+  document.getElementById('ittl').textContent=info.title;
+  document.getElementById('ibody').textContent=info.body;
+  infoM.classList.add('open');
+}
+
+// click backdrop to close modals
+[photoM,infoM].forEach(m=>m.addEventListener('click',e=>{
+  if(e.target===m){
+    if(m===photoM&&stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+    m.classList.remove('open');
+  }
+}));
 </script>
