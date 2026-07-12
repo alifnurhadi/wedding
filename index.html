@@ -497,9 +497,9 @@ INFO.forEach(info=>{
 });
 
 // ── Photo frame overlays ──────────────────────────────
-function drawFrame(theme,w,h,gx){
+function drawFrame(theme,w,h,gx,composite){
   gx=gx||fCtx;
-  gx.clearRect(0,0,w,h);
+  if(!composite) gx.clearRect(0,0,w,h);
   gx.textAlign='center';
   const N='Alif N & Lis W',D='30 September 2026 · Blora';
 
@@ -658,7 +658,7 @@ document.getElementById('capBtn').addEventListener('click',async()=>{
     gx.drawImage(vid,0,0,w,h);
   }
   gx.setTransform(1,0,0,1,0,0);
-  drawFrame(theme,w,h,gx);
+  drawFrame(theme,w,h,gx,true); // composite onto video, don't clear
   fl.classList.remove('pop'); void fl.offsetWidth; fl.classList.add('pop');
   const url=out.toDataURL('image/jpeg',.93);
   const dl=document.getElementById('dlBtn');
